@@ -1,0 +1,60 @@
+[project]
+name = "langgraphcode"
+version = "1.0.0"
+description = "智能企业助手系统：LangGraph 编排 + A2A 协作 + MCP 工具层（生产级重构版）"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    # LangGraph & LangChain
+    "langgraph>=1.1.0",
+    "langchain>=1.4.0",
+    "langchain-core>=1.6.0",
+    "langchain-openai>=1.0.0",
+
+    # MCP（工具层）
+    "fastmcp>=4.0.0",
+    "mcp>=2.0.0",
+
+    # A2A（协作层）
+    "a2a-sdk[http-server]>=1.2.0",
+
+    # 数据校验与配置
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+
+    # 日志
+    "structlog>=24.0.0",
+
+    # 运行时
+    "python-dotenv>=1.0.0",
+    "httpx>=0.27.0",
+    "uvicorn>=0.30.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/langgraphcode"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

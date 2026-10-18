@@ -1,0 +1,4 @@
+# 统一换行符，避免 Windows 开发者在 GitHub 上看到整文件 diff
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.bat text eol=crlf
