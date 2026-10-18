@@ -40,18 +40,21 @@ class DataAgent(BaseA2AAgent):
                 id="query_sales",
                 name="销售数据查询",
                 description="查询指定月份和区域的销售数据",
+                tags=["data", "sales"],
                 examples=["查询 2025-03 华北地区的销售数据"],
             ),
             AgentSkill(
                 id="query_customer",
                 name="客户信息查询",
                 description="查询客户的详细信息和健康分",
+                tags=["data", "sales"],
                 examples=["查询客户 C-1001 的信息"],
             ),
             AgentSkill(
                 id="sales_trend",
                 name="销售趋势分析",
                 description="获取最近几个月的销售趋势摘要",
+                tags=["data", "sales"],
                 examples=["分析最近 3 个月的销售趋势"],
             ),
         ]

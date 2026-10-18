@@ -134,6 +134,28 @@ class Settings(BaseSettings):
     a2a: A2ASettings = Field(default_factory=A2ASettings)
     orchestrator: OrchestratorSettings = Field(default_factory=OrchestratorSettings)
 
+    @model_validator(mode="before")
+    @classmethod
+    def _fill_profile_defaults(cls, data: object) -> object:
+        """补齐被环境变量部分覆盖的模型档位。
+
+        通过 ``APP_LLM__ROUTER__API_KEY`` 这类变量覆盖时，pydantic-settings
+        会用「只含该字段的字典」整体替换档位默认值，导致 ``model`` 变成必填而报
+        「llm.router.model Field required」。这里在合并后补回缺省模型，
+        让「只配 API Key」也能启动。
+        """
+        defaults = {"router": "qwen-turbo", "agent": "qwen-plus", "writer": "qwen-max"}
+        if not isinstance(data, dict):
+            return data
+        llm = data.get("llm")
+        if isinstance(llm, dict):
+            for name, model in defaults.items():
+                section = llm.get(name)
+                if isinstance(section, dict):
+                    section.setdefault("model", model)
+                    section.setdefault("base_url", _DEFAULT_BASE_URL)
+        return data
+
     @model_validator(mode="after")
     def _require_api_keys(self) -> "Settings":
         """启动即校验：任一 preset 缺 API Key 立即 fail-fast。"""

@@ -16,7 +16,10 @@ dependencies = [
     "mcp>=2.0.0",
 
     # A2A（协作层）
-    "a2a-sdk[http-server]>=1.2.0",
+    # 说明：代码基于 0.2.x 的 pydantic 类型 API（Part(root=TextPart(...))、
+    # a2a.server.apps.A2AStarletteApplication）；1.x 起改为 protobuf 类型，
+    # 接口不兼容，因此锁定小版本。
+    "a2a-sdk>=0.2.16,<0.3",
 
     # 数据校验与配置
     "pydantic>=2.0.0",

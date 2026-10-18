@@ -38,18 +38,21 @@ class TicketAgent(BaseA2AAgent):
                 id="search_knowledge",
                 name="知识库检索",
                 description="在企业知识库中搜索解决方案",
+                tags=["ticket", "it-support"],
                 examples=["VPN 连接不上怎么办"],
             ),
             AgentSkill(
                 id="get_document",
                 name="文档查看",
                 description="获取知识库文档的完整内容",
+                tags=["ticket", "it-support"],
                 examples=["查看文档 KB-001 的完整内容"],
             ),
             AgentSkill(
                 id="submit_ticket",
                 name="提交工单",
                 description="当知识库无法解决时，生成工单提交建议",
+                tags=["ticket", "it-support"],
                 examples=["帮我提交一个关于网络问题的工单"],
             ),
         ]

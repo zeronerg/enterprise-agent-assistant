@@ -115,7 +115,12 @@ def setup_logging(config: LoggingSettings | None = None) -> None:
 
     formatter = structlog.stdlib.ProcessorFormatter(
         foreign_pre_chain=_foreign_pre_chain(),
-        processors=[renderer],
+        processors=[
+            # ProcessorFormatter 会注入 _record 等内部字段，不清理的话
+            # JSON 日志里会混入 LogRecord 的 repr，采集端解析会变脏。
+            structlog.stdlib.ProcessorFormatter.remove_processors_meta,
+            renderer,
+        ],
     )
     stdout_handler.setFormatter(formatter)
     if file_handler is not None:

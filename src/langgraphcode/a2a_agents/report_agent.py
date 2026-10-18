@@ -35,12 +35,14 @@ class ReportAgent(BaseA2AAgent):
                 id="write_report",
                 name="报告撰写",
                 description="根据主题生成结构化技术报告",
+                tags=["report", "writing"],
                 examples=["写一份关于 AI Agent 技术趋势的报告"],
             ),
             AgentSkill(
                 id="summarize_data",
                 name="数据总结",
                 description="将数据整理为可读的摘要",
+                tags=["report", "writing"],
                 examples=["总结这份销售数据的关键发现"],
             ),
         ]

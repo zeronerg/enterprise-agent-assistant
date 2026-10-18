@@ -58,8 +58,13 @@ class TestDispatchNode:
     def test_empty_result_triggers_error_branch(self) -> None:
         """条件边的判断依据：空 agent_result → handle_error。"""
         empty = FakeGateway()
-        empty.dispatch = lambda intent, query: ""  # type: ignore[assignment]
-        node = make_dispatch_node(empty)  # type: ignore[arg-type]
+
+        async def _empty_response(intent: str, query: str) -> str:
+            """模拟 Agent 返回空结果（必须是协程，节点内部会 await）。"""
+            return ""
+
+        empty.dispatch = _empty_response  # type: ignore[method-assign]
+        node = make_dispatch_node(empty)
 
         result = asyncio.run(node(_state()))
         # 空字符串是假值 → 图的条件边会路由到 handle_error

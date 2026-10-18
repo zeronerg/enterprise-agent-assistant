@@ -14,7 +14,7 @@
 from __future__ import annotations
 
 import uuid
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
 
 import httpx
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -22,6 +22,9 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langgraphcode.common.llm import LLMPreset, create_llm
 from langgraphcode.common.logging import get_logger
 from langgraphcode.config.settings import settings
+
+if TYPE_CHECKING:  # 仅用于类型标注，避免为注解在模块导入期加载 a2a
+    from a2a.types import Message, Task
 
 logger = get_logger(__name__)
 
@@ -118,8 +121,8 @@ class A2AGateway:
         :raises ValueError: 意图无对应 Agent 端点。
         :raises RuntimeError: Agent 任务失败或无结果。
         """
-        from a2a.client import A2AClient, A2ACardResolver
-        from a2a.types import Message, MessageSendParams, Part, Role, Task, TaskState, TextPart
+        from a2a.client import A2ACardResolver, A2AClient
+        from a2a.types import Message, MessageSendParams, Part, Role, TextPart
 
         base_url = INTENT_AGENT_URLS[intent]
         logger.info("A2AGateway 分发", intent=intent, target=base_url)
@@ -142,14 +145,14 @@ class A2AGateway:
         return _extract_response_text(response)
 
 
-def _extract_response_text(response: "Message | Task") -> str:
+def _extract_response_text(response: Message | Task) -> str:
     """从 A2A 响应（Message 或最终态 Task）中提取文本结果。
 
     :param response: A2A send_message 的返回。
     :return: 拼接后的文本内容。
     :raises RuntimeError: 任务失败或没有可提取的内容。
     """
-    from a2a.types import Message, Task, TaskState, TextPart
+    from a2a.types import Message, TaskState
 
     if isinstance(response, Message):
         return _parts_to_text(response.parts)

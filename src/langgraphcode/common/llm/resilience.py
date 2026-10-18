@@ -26,7 +26,7 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import BaseMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
 from langchain_core.runnables import Runnable, RunnableConfig
-from pydantic import BaseModel, ConfigDict
+from pydantic import ConfigDict
 
 T = TypeVar("T")
 
@@ -181,7 +181,7 @@ class CircuitBreaker:
         return result
 
 
-def _retry_sync(
+def _retry_sync(  # noqa: UP047 - 与 CallGuard 的 TypeVar 风格保持一致
     fn: Callable[[], T],
     *,
     max_attempts: int,
@@ -199,7 +199,7 @@ def _retry_sync(
     raise AssertionError("unreachable")  # pragma: no cover
 
 
-async def _retry_async(
+async def _retry_async(  # noqa: UP047 - 与 CallGuard 的 TypeVar 风格保持一致
     fn: Callable[[], Awaitable[T]],
     *,
     max_attempts: int,
@@ -350,7 +350,7 @@ class ResilientChatModel(BaseChatModel):
 
     # ---- 透明委托：工具绑定与结构化输出 ----
 
-    def bind_tools(self, tools: list[Any], **kwargs: Any) -> "ResilientChatModel":
+    def bind_tools(self, tools: list[Any], **kwargs: Any) -> ResilientChatModel:
         """绑定工具：返回仍受守卫保护的新包装器。"""
         return ResilientChatModel(bound=self.bound.bind_tools(tools, **kwargs), guard=self.guard)
 
